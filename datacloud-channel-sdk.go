@@ -114,6 +114,7 @@ func (d *DatacloudChannelSdk) refreshToken(phone, appId string) (map[string]inte
 
 	req.Header.Set("authorization", headers["authorization"])
 	req.Header.Set("referer", "https://datacloud.geovisearth.com")
+	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := d.client.Do(req)
 	if err != nil {

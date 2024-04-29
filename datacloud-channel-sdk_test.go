@@ -16,7 +16,7 @@ func TestMain(m *testing.M) {
 	cloudApiHost := "https://api.geovisearth.com"
 	dataCloudHost := "https://datacloud.geovisearth.com"
 
-	sdk = NewDatacloudChannelSdk(secretId, secretKey, channelId, cloudApiHost, dataCloudHost)
+	sdk, _ = NewDatacloudChannelSdk(secretId, secretKey, channelId, cloudApiHost, dataCloudHost)
 
 	// Run the tests
 	code := m.Run()
@@ -24,6 +24,21 @@ func TestMain(m *testing.M) {
 	// Teardown
 
 	os.Exit(code)
+}
+
+func TestCreateCertificationSign(m *testing.M) {
+	// Setup
+	secretId := "your secret id"
+	secretKey := "your secret key"
+	sign, _ := NewCertificationSign(secretId, secretKey)
+
+	// Run the tests
+	headers := sign.Sign(map[string]string{
+		"path":   "/datacloud/auth/phone",
+		"method": "GET",
+	})
+
+	fmt.Println(headers)
 }
 
 func TestGetTokenByPhone(t *testing.T) {

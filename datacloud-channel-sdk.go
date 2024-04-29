@@ -15,7 +15,7 @@ type DatacloudChannelSdk struct {
 	channelId     string
 	cloudApiHost  string
 	dataCloudHost string
-	geoSign       *CloudApiSign
+	geoSign       *DatacloudSign
 	client        *http.Client
 }
 
@@ -25,7 +25,7 @@ type RefreshTokenPayload struct {
 	Mobile  string `json:"mobile"`
 }
 
-func NewDatacloudChannelSdk(secretId, secretKey, channelId, cloudApiHost, dataCloudHost string) *DatacloudChannelSdk {
+func NewDatacloudChannelSdk(secretId, secretKey, channelId, cloudApiHost, dataCloudHost string) (*DatacloudChannelSdk, error) {
 	if cloudApiHost == "" {
 		cloudApiHost = "https://api.geovisearth.com"
 	}
@@ -34,7 +34,10 @@ func NewDatacloudChannelSdk(secretId, secretKey, channelId, cloudApiHost, dataCl
 		dataCloudHost = "https://datacloud.geovisearth.com"
 	}
 
-	geoSign := NewCloudApiSign(secretId, secretKey, "geovis-data-cloud", nil)
+	geoSign, err := NewDatacloudSign(secretId, secretKey)
+	if err != nil {
+		return nil, err
+	}
 
 	return &DatacloudChannelSdk{
 		secretId:      secretId,
@@ -44,7 +47,7 @@ func NewDatacloudChannelSdk(secretId, secretKey, channelId, cloudApiHost, dataCl
 		dataCloudHost: dataCloudHost,
 		geoSign:       geoSign,
 		client:        &http.Client{},
-	}
+	}, nil
 }
 
 func (d *DatacloudChannelSdk) getTokenByPhone(phone string) (map[string]interface{}, error) {

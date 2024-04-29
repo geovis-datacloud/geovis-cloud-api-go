@@ -26,7 +26,7 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func TestCreateCertificationSign(m *testing.M) {
+func TestCreateCertificationSign(t *testing.T) {
 	// Setup
 	secretId := "your secret id"
 	secretKey := "your secret key"
